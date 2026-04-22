@@ -1,0 +1,33 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Editors
+.vscode/
+.idea/
+
+# Build / cache
+.next/
+dist/
+out/
+.vercel/
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# AI
+AGENTS.md
+CLAUDE.md
