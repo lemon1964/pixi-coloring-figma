@@ -21,6 +21,7 @@ export async function loadColoringTask(
       segmentPrefix: demoSet.segmentPrefix ?? "seg",
       framePadding: demoSet.framePadding ?? 0,
       zIndexOverrides: demoSet.zIndexOverrides,
+      reverseLayerOrder: demoSet.reverseLayerOrder ?? false,
     });
   } else {
     layout = await fetchJson<ColoringLayout>(

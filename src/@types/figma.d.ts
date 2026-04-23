@@ -27,4 +27,5 @@ interface ConvertFigmaJsonOptions {
   segmentPrefix?: string;
   framePadding?: number;
   zIndexOverrides?: Record<string, number>;
+  reverseLayerOrder?: boolean;
 }

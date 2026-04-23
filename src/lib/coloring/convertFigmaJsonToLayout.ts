@@ -25,6 +25,7 @@ export function convertFigmaJsonToLayout(
     segmentPrefix = "seg",
     framePadding = 0,
     zIndexOverrides = {},
+    reverseLayerOrder = false,
   } = options;
 
   const resolvedFrameName = frameName ?? Object.keys(figmaJson)[0];
@@ -45,11 +46,16 @@ export function convertFigmaJsonToLayout(
   const maxX = Math.max(...nodeEntries.map(([, node]) => node.x + node.width));
   const maxY = Math.max(...nodeEntries.map(([, node]) => node.y + node.height));
 
+  const total = nodeEntries.length;
+
   const segments: ColoringLayoutSegment[] = nodeEntries.map(
     ([nodeId, node], index) => {
       const segmentId = `${segmentPrefix}${nodeId}`;
       const decorative = isDecorativeSegment(nodeId);
-      const defaultZIndex = decorative ? 1000 + index : index + 1;
+
+      const baseZIndex = reverseLayerOrder ? total - index : index + 1;
+
+      const defaultZIndex = decorative ? 1000 + baseZIndex : baseZIndex;
 
       return {
         id: segmentId,

@@ -14,6 +14,7 @@ export interface DemoSetConfig {
   segmentPrefix?: string;
   framePadding?: number;
   zIndexOverrides?: Record<string, number>;
+  reverseLayerOrder?: boolean;
 }
 
 export const demoSets: DemoSetConfig[] = [
@@ -44,14 +45,10 @@ export const demoSets: DemoSetConfig[] = [
     basePath: "/turtle",
     displayScale: 1.4,
     sourceType: "figma-json",
-    figmaFile: "figma-coordinates.json",
+    figmaFile: "coords.json",
     frameName: "canvas",
     segmentPrefix: "seg",
     framePadding: 24,
-    zIndexOverrides: {
-      seg00: 2000,
-      seg01: 1900,
-      seg02: 1901,
-    },
+    reverseLayerOrder: true,
   },
 ];

@@ -11,6 +11,117 @@ interface ColoringCanvasProps {
   displayScale?: number;
 }
 
+type TextureCanvasCacheItem = {
+  canvas: HTMLCanvasElement;
+  context: CanvasRenderingContext2D;
+};
+
+const textureCanvasCache = new Map<string, TextureCanvasCacheItem>();
+
+function getTextureCacheKey(texture: PIXI.Texture): string {
+  const resource = texture.baseTexture.resource as
+    | { source?: CanvasImageSource }
+    | undefined;
+
+  const source = resource?.source;
+
+  const sourceId =
+    source &&
+    "src" in source &&
+    typeof (source as HTMLImageElement).src === "string"
+      ? (source as HTMLImageElement).src
+      : `bt-${texture.baseTexture.uid}`;
+
+  return [
+    sourceId,
+    texture.frame.x,
+    texture.frame.y,
+    texture.frame.width,
+    texture.frame.height,
+  ].join(":");
+}
+
+function getTextureCanvas(texture: PIXI.Texture): TextureCanvasCacheItem | null {
+  const cacheKey = getTextureCacheKey(texture);
+
+  const cached = textureCanvasCache.get(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const resource = texture.baseTexture.resource as
+    | { source?: CanvasImageSource }
+    | undefined;
+
+  const source = resource?.source;
+  if (!source) {
+    return null;
+  }
+
+  const frame = texture.frame;
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(frame.width));
+  canvas.height = Math.max(1, Math.round(frame.height));
+
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  if (!context) {
+    return null;
+  }
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(
+    source,
+    frame.x,
+    frame.y,
+    frame.width,
+    frame.height,
+    0,
+    0,
+    frame.width,
+    frame.height
+  );
+
+  const result = { canvas, context };
+  textureCanvasCache.set(cacheKey, result);
+
+  return result;
+}
+
+function enableAlphaHitTesting(
+  sprite: PIXI.Sprite,
+  alphaThreshold = 10
+): void {
+  const originalContainsPoint = sprite.containsPoint.bind(sprite);
+
+  sprite.containsPoint = (point: PIXI.IPointData): boolean => {
+    if (!originalContainsPoint(point)) {
+      return false;
+    }
+
+    const localPoint = sprite.worldTransform.applyInverse(
+      point,
+      new PIXI.Point()
+    );
+
+    const x = Math.floor(localPoint.x);
+    const y = Math.floor(localPoint.y);
+
+    if (x < 0 || y < 0 || x >= sprite.width || y >= sprite.height) {
+      return false;
+    }
+
+    const textureCanvas = getTextureCanvas(sprite.texture);
+    if (!textureCanvas) {
+      return true;
+    }
+
+    const pixel = textureCanvas.context.getImageData(x, y, 1, 1).data;
+    const alpha = pixel[3];
+
+    return alpha >= alphaThreshold;
+  };
+}
+
 export default function ColoringCanvas({
   task,
   selectedColor,
@@ -61,14 +172,16 @@ export default function ColoringCanvas({
 
       sprite.zIndex = segment.zIndex ?? 0;
       sprite.tint = 0xffffff;
-      
+
       if (segment.interactive === false) {
         sprite.eventMode = "none";
         sprite.cursor = "default";
       } else {
         sprite.eventMode = "static";
         sprite.cursor = "pointer";
-      
+
+        enableAlphaHitTesting(sprite);
+
         sprite.on("pointertap", () => {
           sprite.tint = selectedColorRef.current;
         });
