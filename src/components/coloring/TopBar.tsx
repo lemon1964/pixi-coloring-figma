@@ -1,20 +1,17 @@
 interface TopBarProps {
   title: string;
-  canSpread: boolean;
-  testSpread: boolean;
-  onToggleSpread: () => void;
+  onBack?: () => void;
 }
 
-export default function TopBar({
-  title,
-  canSpread,
-  testSpread,
-  onToggleSpread,
-}: TopBarProps) {
+export default function TopBar({ title, onBack }: TopBarProps) {
   return (
     <div className="panel-surface w-full px-3 py-3 sm:px-4">
       <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3">
-        <button className="rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow sm:px-4">
+        <button
+          type="button"
+          onClick={onBack}
+          className="rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow sm:px-4"
+        >
           Назад
         </button>
 
@@ -22,14 +19,7 @@ export default function TopBar({
           {title}
         </h1>
 
-        <button
-          type="button"
-          onClick={onToggleSpread}
-          disabled={!canSpread}
-          className="rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow disabled:opacity-40 sm:px-4"
-        >
-          {testSpread ? "Собрать" : "Раздвинуть"}
-        </button>
+        <div />
       </div>
     </div>
   );
