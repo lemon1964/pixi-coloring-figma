@@ -4,6 +4,7 @@ type FigmaCoordinateNodeType =
   | "POLYGON"
   | "VECTOR"
   | "STAR"
+  | "GROUP"
   | string;
 
 interface FigmaCoordinateNode {
@@ -24,4 +25,6 @@ interface ConvertFigmaJsonOptions {
   frameName?: string;
   strokeFile?: string;
   segmentPrefix?: string;
+  framePadding?: number;
+  zIndexOverrides?: Record<string, number>;
 }

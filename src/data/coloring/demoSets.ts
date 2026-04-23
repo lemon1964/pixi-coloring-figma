@@ -12,6 +12,8 @@ export interface DemoSetConfig {
   frameName?: string;
   strokeFile?: string;
   segmentPrefix?: string;
+  framePadding?: number;
+  zIndexOverrides?: Record<string, number>;
 }
 
 export const demoSets: DemoSetConfig[] = [
@@ -34,5 +36,22 @@ export const demoSets: DemoSetConfig[] = [
     figmaFile: "figma-coordinates.json",
     frameName: "coloring",
     segmentPrefix: "seg",
+  },
+  {
+    id: "turtle",
+    title: "Turtle",
+    buttonLabel: "turtle",
+    basePath: "/turtle",
+    displayScale: 1.4,
+    sourceType: "figma-json",
+    figmaFile: "figma-coordinates.json",
+    frameName: "canvas",
+    segmentPrefix: "seg",
+    framePadding: 24,
+    zIndexOverrides: {
+      seg00: 2000,
+      seg01: 1900,
+      seg02: 1901,
+    },
   },
 ];

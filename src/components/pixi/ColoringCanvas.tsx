@@ -60,13 +60,19 @@ export default function ColoringCanvas({
       sprite.y = testSpread ? (debugPosition?.y ?? segment.y) : segment.y;
 
       sprite.zIndex = segment.zIndex ?? 0;
-      sprite.eventMode = "static";
-      sprite.cursor = "pointer";
       sprite.tint = 0xffffff;
-
-      sprite.on("pointertap", () => {
-        sprite.tint = selectedColorRef.current;
-      });
+      
+      if (segment.interactive === false) {
+        sprite.eventMode = "none";
+        sprite.cursor = "default";
+      } else {
+        sprite.eventMode = "static";
+        sprite.cursor = "pointer";
+      
+        sprite.on("pointertap", () => {
+          sprite.tint = selectedColorRef.current;
+        });
+      }
 
       stage.addChild(sprite);
       segmentSpritesRef.current[segment.id] = sprite;

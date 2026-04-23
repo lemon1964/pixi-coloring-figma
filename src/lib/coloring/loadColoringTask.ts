@@ -19,6 +19,8 @@ export async function loadColoringTask(
       frameName: demoSet.frameName,
       strokeFile: demoSet.strokeFile,
       segmentPrefix: demoSet.segmentPrefix ?? "seg",
+      framePadding: demoSet.framePadding ?? 0,
+      zIndexOverrides: demoSet.zIndexOverrides,
     });
   } else {
     layout = await fetchJson<ColoringLayout>(

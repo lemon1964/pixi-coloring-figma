@@ -16,6 +16,7 @@ export const buildColoringTask = (
         x: segment.x,
         y: segment.y,
         zIndex: segment.zIndex,
+        interactive: segment.interactive,
       })),
   };
 };
