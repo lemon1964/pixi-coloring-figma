@@ -1,25 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { ColoringItemConfig } from "@/data/coloring/coloringItems";
+import type { ColoringTopicConfig } from "@/data/coloring/coloringTopics";
 
-interface ColoringCatalogCardProps {
-  item: ColoringItemConfig;
+interface TopicCatalogCardProps {
+  topic: ColoringTopicConfig;
 }
 
-export default function ColoringCatalogCard({
-  item,
-}: ColoringCatalogCardProps) {
+export default function TopicCatalogCard({ topic }: TopicCatalogCardProps) {
   return (
     <Link
-      href={`/coloring/${item.slug}`}
+      href={`/topic/${topic.slug}`}
       className="kid-card group block overflow-hidden rounded-3xl p-3 sm:p-4"
     >
       <div className="overflow-hidden rounded-2xl bg-stone-100">
         <div className="relative aspect-square overflow-hidden rounded-2xl bg-white">
           <Image
             loading="eager"
-            src={item.previewPath}
-            alt={item.title}
+            src={topic.previewPath}
+            alt={topic.title}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -29,17 +27,17 @@ export default function ColoringCatalogCard({
 
       <div className="px-1 pt-4">
         <h2 className="text-base font-semibold text-stone-800 sm:text-lg">
-          {item.title}
+          {topic.title}
         </h2>
 
-        {item.description ? (
+        {topic.description ? (
           <p className="mt-2 line-clamp-3 text-sm leading-5 text-stone-600">
-            {item.description}
+            {topic.description}
           </p>
         ) : null}
 
-        <div className="mt-4 inline-flex items-center rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-800">
-          Начать раскрашивать
+        <div className="mt-4 inline-flex items-center rounded-full bg-amber-100 px-3 py-1.5 text-xs font-medium text-amber-800">
+          Открыть тему
         </div>
       </div>
     </Link>

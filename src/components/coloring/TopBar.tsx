@@ -1,26 +1,46 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 interface TopBarProps {
   title: string;
   onBack?: () => void;
 }
 
 export default function TopBar({ title, onBack }: TopBarProps) {
+  const router = useRouter();
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+      return;
+    }
+
+    router.back();
+  };
+
   return (
-    <div className="panel-surface w-full px-3 py-3 sm:px-4">
-      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-3">
+    <header className="kid-topbar rounded-2xl px-3 py-3 sm:px-4">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-stone-800">
+          <span className="text-lg">🐝</span>
+          <span className="text-base font-bold sm:text-lg">кидби</span>
+        </div>
+
         <button
           type="button"
-          onClick={onBack}
-          className="rounded-lg bg-white px-3 py-2 text-sm text-gray-500 shadow sm:px-4"
+          onClick={handleBack}
+          className="rounded-full bg-white px-4 py-2 text-sm font-medium text-stone-600 shadow-sm"
         >
           Назад
         </button>
+      </div>
 
-        <h1 className="text-center text-sm font-semibold text-gray-500 sm:text-lg">
+      <div className="mt-3 border-t border-dashed border-stone-300 pt-3">
+        <h1 className="text-base font-semibold text-stone-700 sm:text-lg">
           {title}
         </h1>
-
-        <div />
       </div>
-    </div>
+    </header>
   );
 }
